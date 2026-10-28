@@ -34,7 +34,7 @@ if st.button("Check") and msg.strip():
     else:
         st.success(f"✅ Looks safe ({1 - prob:.0%} confident)")
 
-        if token:
+    if token:
         try:
             client = OpenAI(base_url="https://models.github.ai/inference", api_key=token)
             r = client.chat.completions.create(
