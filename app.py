@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from datasets import load_dataset
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
