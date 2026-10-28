@@ -12,6 +12,9 @@ st.caption("A TF-IDF + logistic regression model, with an LLM that explains each
 @st.cache_resource
 def train_model():
     df = load_dataset("ucirvine/sms_spam", split="train").to_pandas()
+    extra = pd.read_csv("indian_messages.csv")
+    texts = pd.concat([df["sms"], extra["text"]])
+    labels = pd.concat([df["label"], extra["label"]])
     model = make_pipeline(
         TfidfVectorizer(ngram_range=(1, 2), min_df=2),
         LogisticRegression(max_iter=1000, class_weight="balanced"),
