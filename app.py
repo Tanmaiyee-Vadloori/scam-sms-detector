@@ -34,13 +34,20 @@ if st.button("Check") and msg.strip():
     else:
         st.success(f"✅ Looks safe ({1 - prob:.0%} confident)")
 
-    if token:
-        client = OpenAI(base_url="https://models.github.ai/inference", api_key=token)
-        r = client.chat.completions.create(
-            model="openai/gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a fraud analyst. In 2 sentences, explain whether this message looks like a scam and why."},
-                {"role": "user", "content": msg},
-            ],
-        )
-        st.info(r.choices[0].message.content)
+        if token:
+        try:
+            client = OpenAI(base_url="https://models.github.ai/inference", api_key=token)
+            r = client.chat.completions.create(
+                model="openai/gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a fraud analyst. In 2 sentences, explain whether this message looks like a scam and why."},
+                    {"role": "user", "content": msg},
+                ],
+            )
+            if isinstance(r, str):
+                st.warning("The LLM service returned an unexpected response:")
+                st.code(r[:300])
+            else:
+                st.info(r.choices[0].message.content)
+        except Exception as e:
+            st.warning(f"LLM explanation unavailable: {e}")
